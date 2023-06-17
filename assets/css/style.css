@@ -1,0 +1,16 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+html {
+  background-color: aqua;
+  margin: 24px;
+}
+h3 {
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+p {
+  margin-bottom: 5px;
+}
