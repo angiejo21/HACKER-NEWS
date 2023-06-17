@@ -94,7 +94,7 @@ function createNews(idNews, titleNews, authorNews, linkNews, dateNews) {
     "a",
     newsCard,
     `url-${idNews}`,
-    linkNews,
+    `${linkNews.substr(0, 50)}...`,
     "linkNews",
     "href",
     linkNews
@@ -114,7 +114,7 @@ main.addEventListener("click", (e) => {
   console.log(e.target);
   if (e.target.id == "loadMore") {
     counter += 10;
-    container.innerHTML = "";
+    mainContainer.innerHTML = "";
     loadNewsBulk();
   }
 });

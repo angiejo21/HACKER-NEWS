@@ -4,13 +4,73 @@
   box-sizing: border-box;
 }
 html {
-  background-color: aqua;
   margin: 24px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: rgb(211, 196, 196);
+  background-size: contain;
+  background-repeat: repeat;
+}
+header {
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+main {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+button {
+  background-color: #f15bb5;
+  padding: 12px 20px;
+  font-size: 1rem;
+  text-transform: uppercase;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  border: none;
+  border-radius: 25px;
+  transition: all cubic-bezier(0.075, 0.82, 0.165, 1) 1s;
+}
+button:hover,
+button:active {
+  background-color: #fe85cd;
+  transform: scale(0.98);
 }
 h3 {
-  margin-top: 20px;
-  margin-bottom: 10px;
-}
-p {
   margin-bottom: 5px;
+}
+.author {
+  margin-bottom: 5px;
+  font-style: italic;
+}
+a {
+  text-decoration: none;
+  font-size: 0.7rem;
+}
+.date {
+  background-color: rgb(237, 222, 222);
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  bottom: -10px;
+  right: -10px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  font-size: 0.9rem;
+  box-shadow: 5px 5px 10px #00000022;
+}
+.main-container {
+  max-width: 512px;
+}
+.news-card {
+  background-color: white;
+  border-radius: 15px;
+  padding: 20px 30px;
+  margin-bottom: 15px;
+  position: relative;
+  box-shadow: 5px 5px 10px #00000022;
 }
