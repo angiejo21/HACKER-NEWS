@@ -2,6 +2,7 @@ const main = document.querySelector("main");
 const mainContainer = document.querySelector(".main-container");
 const BASE_URL = "https://hacker-news.firebaseio.com/v0/";
 const GEN_URL = "newstories.json";
+let baseNum = 0;
 let counter = 10;
 
 //Funzione peer creare un elemento generico
@@ -49,7 +50,7 @@ async function loadNewsBulk() {
     })
     .then((json) => {
       let newsArray = json.filter((item, index) => {
-        if (index < counter) {
+        if (index < counter && index > baseNum) {
           return item;
         }
       });
@@ -77,7 +78,7 @@ async function loadNewsDetails(newsArray) {
 
 //Funzione che crea la card della notizia
 function createNews(idNews, titleNews, authorNews, linkNews, dateNews) {
-  let time = new Date(dateNews);
+  let time = new Date(dateNews * 1000);
   const newsCard = document.createElement("div");
   newsCard.setAttribute("id", `news-${idNews}`);
   newsCard.classList.add("news-card");
@@ -113,8 +114,8 @@ loadNewsBulk();
 main.addEventListener("click", (e) => {
   console.log(e.target);
   if (e.target.id == "loadMore") {
+    baseNum = counter;
     counter += 10;
-    mainContainer.innerHTML = "";
     loadNewsBulk();
   }
 });
