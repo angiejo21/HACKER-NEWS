@@ -50,7 +50,7 @@ async function loadNewsBulk() {
     })
     .then((json) => {
       let newsArray = json.filter((item, index) => {
-        if (index < counter && index > baseNum) {
+        if (index < counter && index >= baseNum) {
           return item;
         }
       });
