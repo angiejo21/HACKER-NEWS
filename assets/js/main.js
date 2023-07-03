@@ -1,6 +1,6 @@
-const main = document.querySelector("main");
-const newsContainer = document.querySelector(".container");
-const topContainer = document.querySelector(".top-container");
+const loadMore = document.querySelector("#loadMore");
+const newsContainer = document.querySelector(".news-container > .container");
+const topContainer = document.querySelector(".top-container > .container");
 const BASE_URL = "https://hacker-news.firebaseio.com/v0/";
 const GEN_URL = "newstories.json";
 const TOP_URL = "topstories.json";
@@ -8,39 +8,7 @@ const card = document.querySelector("#card");
 let baseNum = 0;
 let counter = 10;
 
-//Funzione peer creare un elemento generico
-function createElement(
-  eTag,
-  eParent,
-  eId,
-  eContent,
-  eClass,
-  eAttribute,
-  attributeValue
-) {
-  const element = document.createElement(eTag);
-  if (eContent) {
-    element.innerHTML = eContent;
-  }
-  if (eClass) {
-    element.classList.add(eClass);
-  }
-  if (eId) {
-    element.setAttribute("id", eId);
-  } else {
-    element.setAttribute("id", eTag);
-  }
-  if (eAttribute) {
-    element.setAttribute(eAttribute, attributeValue);
-  }
-  if (eParent === "body") {
-    document.body.append(element);
-  } else {
-    eParent.append(element);
-  }
-}
-
-//Funzione per scaricare tutti gli id delle notizie
+//FUNZIONE PER SCARICARE TUTTI GLI ID DELLE NOTIZIE
 async function loadNewsBulk(storiesURL) {
   let response = await fetch(BASE_URL + storiesURL, {
     method: "GET",
@@ -61,17 +29,16 @@ async function loadNewsBulk(storiesURL) {
         loadNewsDetails(newsArray, newsContainer);
       } else if (storiesURL === TOP_URL) {
         let newsArray = json.filter((item, index) => {
-          if (index < 5) {
+          if (index < 1) {
             return item;
           }
         });
         loadNewsDetails(newsArray, topContainer);
       }
-      // return newsArray;
     });
 }
 
-//Funzione per scaricare i dettagli delle notizie
+//FUNZIONE PER SCARICARE I DETTAGLI DELLE NOTIZIE
 async function loadNewsDetails(newsArray, container) {
   newsArray.forEach((item) => {
     let response = fetch(BASE_URL + "item/" + item + ".json", {
@@ -82,43 +49,65 @@ async function loadNewsDetails(newsArray, container) {
     })
       .then((response) => response.json())
       .then((json) => {
+        console.log(json);
         createNews(
           container,
           json.id,
           json.title,
           json.by,
           json.url,
-          json.time
+          json.time,
+          json.text
         );
       });
   });
 }
 
-//Funzione che crea la card della notizia
+//FUNZIONE CHE CREA LA CARD DELLA NOTIZIA
 function createNews(
   container,
   idNews,
   titleNews,
   authorNews,
   linkNews,
-  dateNews
+  dateNews,
+  textNews
 ) {
   let time = editDate(dateNews);
   const newCard = card.content.cloneNode(true).querySelector(".news-card");
+  const footer = newCard.querySelector(".footer");
   newCard.setAttribute("id", `news-${idNews}`);
-  newCard.querySelector("h3").innerText = titleNews;
+  if (container == topContainer) {
+    newCard.querySelector("h3").innerText = `${titleNews} ⭐`;
+  } else {
+    newCard.querySelector("h3").innerText = titleNews;
+  }
   newCard.querySelector(".author").innerText = `by: ${authorNews}`;
-  newCard.querySelector(".link").innerText = editLink(linkNews);
+  const linkTag = newCard.querySelector(".link");
+  if (linkNews) {
+    linkTag.innerText = editLink(linkNews);
+  } else if (!linkNews) {
+    linkTag.innerText = "Read more ⬇️";
+    const text = document.createElement("div");
+    text.innerHTML = textNews;
+    text.classList.toggle("hid");
+    footer.append(text);
+  }
   newCard.querySelector(
     ".date"
   ).innerText = `${time.day}/${time.month} - ${time.hour}:${time.minutes}`;
+
   newCard.addEventListener("click", () => {
-    window.open(linkNews, "_blank", "noreferrer, noopener");
+    if (linkNews) {
+      window.open(linkNews, "_blank", "noreferrer, noopener");
+    } else {
+      footer.querySelector("div").classList.toggle("hid");
+    }
   });
   container.append(newCard);
 }
 
-//FUNZIONE CHE FORMATTA LA DATA
+//funzione che formatta la data
 function editDate(timestamp) {
   let time = new Date(timestamp * 1000);
   let edit = (num) => (num > 9 ? num : `0${num}`);
@@ -129,7 +118,7 @@ function editDate(timestamp) {
   return time;
 }
 
-//FUNZIONE CHE ACCORCIA IL LINK
+//funzione che accorcia il link
 function editLink(aLink) {
   let editedLink = aLink;
   if (editedLink.includes("http://")) {
@@ -146,10 +135,8 @@ function editLink(aLink) {
 loadNewsBulk(GEN_URL);
 loadNewsBulk(TOP_URL);
 
-main.addEventListener("click", (e) => {
-  if (e.target.id == "loadMore") {
-    baseNum = counter;
-    counter += 10;
-    loadNewsBulk(GEN_URL);
-  }
+loadMore.addEventListener("click", () => {
+  baseNum = counter;
+  counter += 10;
+  loadNewsBulk(GEN_URL);
 });
