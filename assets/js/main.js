@@ -49,7 +49,6 @@ async function loadNewsDetails(newsArray, container) {
     })
       .then((response) => response.json())
       .then((json) => {
-        console.log(json);
         createNews(
           container,
           json.id,
